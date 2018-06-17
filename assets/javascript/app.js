@@ -1,7 +1,7 @@
 var question = ["Who killed Superman?",
                 "Who is Thor's dad?",
                 "Where is Wolverine from?", 
-                "Whish one of these did not fight Superman?",
+                "Which one of these did not fight Superman?",
             ];
 
 var answers = ["1", "2", "3", "0"];
@@ -12,9 +12,14 @@ var selection = [["Joker", "Doomsday", "Batman", "Brainiac"],
                 ["Lois Lane", "Batman", "Muhammad Ali", "Lex Luthor"],
             ];
 
+var gify =[];
+
 var correct = 0;
 var incorrect = 0;
 var unanswered = 0;
+var pick = 0;
+var count = 0;
+var second;
 
 var i = correct + incorrect + unanswered;
 
@@ -24,12 +29,12 @@ $(document).ready(function(){
     $("#start").click(function(){
         $("#start").hide();
 
-        intervalID = setInterval(game,5000);
+        intervalID = setInterval(game, 1000);
 
     });
 });
 
-
+//out puts the multiple choice questions
 function trivia(quest, sele){
 
     var word = document.createElement("p");
@@ -49,35 +54,75 @@ function trivia(quest, sele){
     }
 }
 
-function notans(){
-    $("#every").empty();
-    $("#ques").hide();
-    unanswered++;
-}
-
 function game(){
     i = correct + incorrect + unanswered;
-    console.log(i);
-    console.log(question.length);
     
     if(i === question.length){
         clearInterval(intervalID);
     }else{
+        $("#every").empty();
+        seconds = 3 - count++;
+        $("#every").append("<p> Time Remainging: " + seconds + "</p>");
+        //timeLeft(5 ,count++);
         trivia(question[i], selection[i]);
 
-        var slow = setTimeout(notans, 3000);
+        if(seconds === 0){
+            // $("p").hide();
+            // $(".asking").hide();
+            unanswered++;
+            inBet(2, selection[i][answers[i]]);
+            count = 0;
+        }
 
         $(".asking").click(function(){
+            count = 0;
             if($(this).attr("value") === answers[i]){
-                console.log("hello");
                 correct++;
+                inBet(0, selection[i][answers[i]]);
             }else if($(this).attr("value") !== answers[i]){
                 incorrect++;
+                inBet(1, selection[i][answers[i]]);
             }
-
-            clearInterval(intervalID);
-            $("#every").empty();
-            $("#ques").hide()
         });
     }
+}
+
+
+// out put the answers
+function inBet(p, a){
+    clearInterval(intervalID);
+    $("#every").empty();
+
+    if(p === 0){
+        var word = document.createElement("h2");
+        word.textContent = "Correct!!!";
+        document.getElementById("every").appendChild(word);
+        //$("#every").append("<img scr=assets/images/ >");       *** remember to finish this code
+
+    }else if(p === 1){
+        var word = document.createElement("h2");
+        word.textContent = "Nope!!!";
+        var word2 = document.createElement("p");
+        word2.textContent = "The correct answer is " + a;
+        document.getElementById("every").appendChild(word);
+        document.getElementById("every").appendChild(word2);
+        //$("#every").append("<img scr=assets/images/ >");
+
+    }else{
+        var word = document.createElement("h2");
+        word.textContent = "Too Slow";
+        var word2 = document.createElement("p");
+        word2.textContent = "The correct answer is " + a;
+        document.getElementById("every").appendChild(word);
+        document.getElementById("every").appendChild(word2);
+        //$("#every").append("<img scr=assets/images/ >");
+
+    }
+    intervalID = setInterval(game, 1000);
+}
+
+// this is when the users do not answer in time.
+function timeLeft(limit, t){
+    var seconds = limit - t;
+    $("#every").append("<p> Time Remainging: " + seconds + "</p>");
 }
