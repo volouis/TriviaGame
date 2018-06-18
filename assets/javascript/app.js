@@ -12,7 +12,7 @@ var selection = [["Joker", "Doomsday", "Batman", "Brainiac"],
                 ["Lois Lane", "Batman", "Muhammad Ali", "Lex Luthor"],
             ];
 
-var gify =[];
+var gify =["Doomsday.gif", "Odin.gif", "Wolverine.gif", "LoisLane.gif"];
 
 var correct = 0;
 var incorrect = 0;
@@ -20,7 +20,6 @@ var unanswered = 0;
 var pick = 0;
 var count = 0;
 var second;
-
 var i = correct + incorrect + unanswered;
 
 
@@ -33,6 +32,36 @@ $(document).ready(function(){
 
     });
 });
+
+function game(){
+    i = correct + incorrect + unanswered;
+    
+    if(i === question.length){
+        clearInterval(intervalID);
+    }else{
+        $("#every").empty();
+        seconds = 3 - count++;
+        $("#every").append("<p> Time Remainging: " + seconds + "</p>");
+        trivia(question[i], selection[i]);
+
+        if(seconds === 0){
+            unanswered++;
+            inBet(2, selection[i][answers[i]], gify[i]);
+            count = 0;
+        }
+
+        $(".asking").click(function(){
+            count = 0;
+            if($(this).attr("value") === answers[i]){
+                correct++;
+                inBet(0, selection[i][answers[i]], gify[i]);
+            }else if($(this).attr("value") !== answers[i]){
+                incorrect++;
+                inBet(1, selection[i][answers[i]], gify[i]);
+            }
+        });
+    }
+}
 
 //out puts the multiple choice questions
 function trivia(quest, sele){
@@ -54,42 +83,8 @@ function trivia(quest, sele){
     }
 }
 
-function game(){
-    i = correct + incorrect + unanswered;
-    
-    if(i === question.length){
-        clearInterval(intervalID);
-    }else{
-        $("#every").empty();
-        seconds = 3 - count++;
-        $("#every").append("<p> Time Remainging: " + seconds + "</p>");
-        //timeLeft(5 ,count++);
-        trivia(question[i], selection[i]);
-
-        if(seconds === 0){
-            // $("p").hide();
-            // $(".asking").hide();
-            unanswered++;
-            inBet(2, selection[i][answers[i]]);
-            count = 0;
-        }
-
-        $(".asking").click(function(){
-            count = 0;
-            if($(this).attr("value") === answers[i]){
-                correct++;
-                inBet(0, selection[i][answers[i]]);
-            }else if($(this).attr("value") !== answers[i]){
-                incorrect++;
-                inBet(1, selection[i][answers[i]]);
-            }
-        });
-    }
-}
-
-
 // out put the answers
-function inBet(p, a){
+function inBet(p, a, g){
     clearInterval(intervalID);
     $("#every").empty();
 
@@ -97,7 +92,7 @@ function inBet(p, a){
         var word = document.createElement("h2");
         word.textContent = "Correct!!!";
         document.getElementById("every").appendChild(word);
-        //$("#every").append("<img scr=assets/images/ >");       *** remember to finish this code
+        $("#every").append("<img src=assets/images/" + g + ">");      // *** remember to finish this code
 
     }else if(p === 1){
         var word = document.createElement("h2");
@@ -106,7 +101,7 @@ function inBet(p, a){
         word2.textContent = "The correct answer is " + a;
         document.getElementById("every").appendChild(word);
         document.getElementById("every").appendChild(word2);
-        //$("#every").append("<img scr=assets/images/ >");
+        $("#every").append("<img src=assets/images/" + g + ">");
 
     }else{
         var word = document.createElement("h2");
@@ -115,7 +110,7 @@ function inBet(p, a){
         word2.textContent = "The correct answer is " + a;
         document.getElementById("every").appendChild(word);
         document.getElementById("every").appendChild(word2);
-        //$("#every").append("<img scr=assets/images/ >");
+        $("#every").append("<img src=assets/images/" + g + ">");
 
     }
     intervalID = setInterval(game, 1000);

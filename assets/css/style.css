@@ -1,0 +1,47 @@
+body{
+    background-image: url(../images/background.jpg);
+}
+
+#content{
+    margin: auto;
+    width: 600px;
+    height: 550px;
+    background-color: beige;
+}
+
+h1, h2, p{
+    text-align: center;
+    font-family: 'Indie Flower', cursive;
+}
+
+h1{
+    color: #3EA2CC;
+}
+
+p{
+    font-size: 20px;
+}
+
+#start{
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    margin: auto;
+}
+
+button{
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    margin: auto;
+    font-family: 'Shadows Into Light', cursive;
+    font-size: 20px;
+    margin-bottom: 5px;
+}
+
+img{
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    margin: auto;
+}
