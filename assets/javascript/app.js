@@ -19,7 +19,7 @@ var incorrect = 0;
 var unanswered = 0;
 var pick = 0;
 var count = 0;
-var second;
+var seconds;
 var i = correct + incorrect + unanswered;
 
 
@@ -38,15 +38,19 @@ function game(){
     
     if(i === question.length){
         clearInterval(intervalID);
+        setTimeout(ending(), 3000);
     }else{
         $("#every").empty();
-        seconds = 3 - count++;
-        $("#every").append("<p> Time Remainging: " + seconds + "</p>");
+        seconds = 10 - count++;
+        $("#every").append("<p> Time Remainging: <b>" + seconds + "</b></p>");
         trivia(question[i], selection[i]);
 
+        // this is when the users do not answer in time.
         if(seconds === 0){
             unanswered++;
+            clearInterval(intervalID);
             inBet(2, selection[i][answers[i]], gify[i]);
+            setTimeout(recall, 3000);
             count = 0;
         }
 
@@ -54,10 +58,14 @@ function game(){
             count = 0;
             if($(this).attr("value") === answers[i]){
                 correct++;
+                clearInterval(intervalID);
                 inBet(0, selection[i][answers[i]], gify[i]);
+                setTimeout(recall, 3000);
             }else if($(this).attr("value") !== answers[i]){
                 incorrect++;
+                clearInterval(intervalID);
                 inBet(1, selection[i][answers[i]], gify[i]);
+                setTimeout(recall, 3000);
             }
         });
     }
@@ -83,9 +91,10 @@ function trivia(quest, sele){
     }
 }
 
+var j = 1;
 // out put the answers
 function inBet(p, a, g){
-    clearInterval(intervalID);
+
     $("#every").empty();
 
     if(p === 0){
@@ -111,13 +120,37 @@ function inBet(p, a, g){
         document.getElementById("every").appendChild(word);
         document.getElementById("every").appendChild(word2);
         $("#every").append("<img src=assets/images/" + g + ">");
-
     }
+}
+
+function recall(){
     intervalID = setInterval(game, 1000);
 }
 
-// this is when the users do not answer in time.
-function timeLeft(limit, t){
-    var seconds = limit - t;
-    $("#every").append("<p> Time Remainging: " + seconds + "</p>");
+function ending(){
+    $("#every").empty();
+    $("#every").append("<h2>All done, heres how you did!</h>");
+    $("#every").append("<p>Correct Answers: " + correct + "</p>");
+    $("#every").append("<p>Incorrect Answers: " + incorrect + "</p>");
+    $("#every").append("<p>Unanswered: " + unanswered + "</p>");
+
+    var restBtn = $("<button>");
+
+    restBtn.text("Start Over?")
+
+    restBtn.addClass("restart");
+
+    $("#every").append(restBtn);
+
+    $(".restart").click(function(){
+        correct = 0;
+        incorrect = 0;
+        unanswered = 0;
+        pick = 0;
+        count = 0;
+        i = correct + incorrect + unanswered;
+
+        intervalID = setInterval(game, 1000);
+    });
 }
+
