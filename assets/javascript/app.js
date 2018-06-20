@@ -96,6 +96,7 @@ var j = 1;
 function inBet(p, a, g){
 
     $("#every").empty();
+    $("#every").append("<p> Time Remainging: <b>" + seconds + "</b></p>");
 
     if(p === 0){
         var word = document.createElement("h2");
@@ -114,7 +115,7 @@ function inBet(p, a, g){
 
     }else{
         var word = document.createElement("h2");
-        word.textContent = "Too Slow";
+        word.textContent = "Too Slow!!!";
         var word2 = document.createElement("p");
         word2.textContent = "The correct answer is " + a;
         document.getElementById("every").appendChild(word);
